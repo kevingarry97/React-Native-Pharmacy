@@ -1,21 +1,22 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import AuthNavigation from './app/routes/authNavigation';
+import AuthContext from './app/auth/context';
+import CartContext from './app/context/cartContext';
+import AppNavigation from './app/routes/appNavigation';
 
 export default function App() {
+  const [user, setUser] = useState();
+  const [cart, setCart] = useState([]);
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <CartContext.Provider value={{cart, setCart}}>
+      <AuthContext.Provider value={{user, setUser}}>
+        <NavigationContainer>
+          {!user ? <AuthNavigation /> : <AppNavigation />}
+        </NavigationContainer>
+      </AuthContext.Provider>
+    </CartContext.Provider>
+      
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
